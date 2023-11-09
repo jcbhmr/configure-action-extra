@@ -1,0 +1,6 @@
+runs:
+  using: executable
+  main:
+    windows-x64: hello.bat
+    linux-x64: hello.sh
+    macos-x64: hello.sh

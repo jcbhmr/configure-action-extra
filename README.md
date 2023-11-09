@@ -1,27 +1,35 @@
 ## Usage
 
 ```yml
-# .github/workflows/test-action.yml
-name: Test action
+# action.yml
+runs:
+  using: executable
+  main:
+    windows-x64: main-windows.exe
+    linux-x64: main-linux
+    macos-x64: main-macos
+```
+
+```yml
+# .github/workflows/publish-action.yml
+name: publish-action
 on:
-  push:
-    branches: "main"
-  pull_request:
+  release:
+    types: released
 jobs:
-  test-action:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+  publish-action:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: denoland/setup-deno@v1
-      - run: deno compile -Ao main main.ts
+      - run: |
+          GOOS=windows GOARCH=amd64 go build main.go -o main-windows.exe
+          GOOS=linux GOARCH=amd64 go build main.go -o main-linux
+          GOOS=darwin GOARCH=amd64 go build main.go -o main-macos
       - uses: jcbhmr/configure-executable-action@v1
+      - uses: jcbhmr/update-release@v1
+      - uses: actions/publish-action@v0.2.2
         with:
-          main: main
-      - id: main
-        uses: ./
-      - shell: jq -C . {0}
-        run: ${{ toJSON(steps.main.outputs) }}
+          source-tag: ${{ github.event.release.tag_name }}
 ```
