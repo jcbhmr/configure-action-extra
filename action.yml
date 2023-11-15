@@ -1,19 +1,11 @@
 name: Configure executable action
-description: 💥 Configure the wrapper runtime for your native executable Action
+description: 💥 Write your GitHub Actions using native executables!
 
 inputs:
   path:
     description:
     default: .
-  main:
-    description:
-    required: true
-  pre:
-    descripion:
-  post:
-    description:
 
-# https://github.com/jcbhmr/configure-bun-action
 runs:
-  using: bun1
-  main: main.ts
+  using: node20
+  main: dist/main.js
