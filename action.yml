@@ -1,9 +1,12 @@
 name: Configure executable action
 description: 💥 Write your GitHub Actions using native executables!
 
+branding:
+  icon: settings
+  color: yellow
+
 inputs:
   path:
-    description:
     default: .
 
 runs:
