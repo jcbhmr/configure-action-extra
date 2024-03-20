@@ -1,3 +1,44 @@
+# Configure executable action
+
+👨‍💻 Write your GitHub Action in any language that compiles to a binary
+
+<table align=center><td>
+
+```yml
+# action.yml
+runs:
+  using: executable
+  main:
+    windows: ./app.exe
+    macos:
+      x64: ./build/app-macos-x64
+    linux:
+      x64: ./build/linux/x64/app
+      arm64: ./target/release/app
+```
+
+<td>
+
+```yml
+# .github/workflows/publish-action.yml
+on:
+  release:
+    types: released
+jobs:
+  publish-action:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cargo build --target x86_64-apple-darwin --release --locked
+      - run: GOOS=windows go build ./main.go -o app.exe
+      - run: gcc main.c -o build/app-linux
+      - uses: jcbhmr/configure-executable-action@v1
+      - uses: actions4git/add-commit-push@v1
+      - uses: actions4gh/publish-action@v1
+```
+
+</table>
+
 ## Usage
 
 ```yml

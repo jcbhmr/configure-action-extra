@@ -1,22 +1,25 @@
 {
-    "type": "module",
-    "devDependencies": {
-      "@actions/core": "^1.10.1",
-      "@actions/github": "^6.0.0",
-      "@actions/tool-cache": "^2.0.1",
-      "@octokit/auth-unauthenticated": "^5.0.1",
-      "@types/node": "^20.9.0",
-      "@types/semver": "^7.5.5",
-      "bun-types": "latest",
-      "execa": "^8.0.1",
-      "find-up": "^6.3.0",
-      "semver": "^7.5.4",
-      "typescript": "^5.0.0",
-      "vite": "^4.5.0",
-      "yaml": "^2.3.4"
-    },
-    "scripts": {
-      "build": "node build.js"
-    }
+  "type": "module",
+  "devDependencies": {
+    "@actions/core": "^1.10.1",
+    "@actions/github": "^6.0.0",
+    "@actions/tool-cache": "^2.0.1",
+    "@octokit/auth-unauthenticated": "^6.0.0",
+    "@types/node": "latest",
+    "@types/semver": "^7.5.8",
+    "bun-types": "latest",
+    "execa": "^8.0.1",
+    "find-up": "^7.0.0",
+    "prettier": "^3.2.5",
+    "semver": "^7.6.0",
+    "typescript": "latest",
+    "yaml": "^2.4.1",
+    "bun": "^1.0.33"
+  },
+  "scripts": {
+    "generate": "bun build src/runtime/main.ts src/runtime/pre.ts src/runtime/post.ts --outdir src/assets --target node",
+    "build": "bun build src/main.ts --outdir dist --target node",
+    "format": "prettier -w .",
+    "lint": "tsc --noEmit"
   }
-  
+}
