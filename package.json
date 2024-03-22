@@ -17,7 +17,6 @@
     "bun": "^1.0.33"
   },
   "scripts": {
-    "generate": "bun build src/runtime/main.ts src/runtime/pre.ts src/runtime/post.ts --outdir src/assets --target node",
     "build": "bun build src/main.ts --outdir dist --target node",
     "format": "prettier -w .",
     "lint": "tsc --noEmit"
