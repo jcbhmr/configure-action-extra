@@ -12,6 +12,7 @@ import { createReadStream, createWriteStream } from "node:fs";
 import { chmod, rm, stat } from "node:fs/promises";
 import { createGunzip } from "node:zlib";
 import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 
 async function gunzip(path) {
   await pipeline(
@@ -34,8 +35,9 @@ function replacexec(cmd, args) {
 const os = process.env.RUNNER_OS.toLowerCase();
 const arch = process.env.RUNNER_ARCH.toLowerCase();
 const { gz, bin, args } = ${JSON.stringify(matrix)}[\`\${os}-\${arch}\`] ?? assert.fail();
-if (gz) await gunzip(bin);
-replacexec(bin, args);`;
+const path = fileURLToPath(new URL(bin, import.meta.url));
+if (gz) await gunzip(path);
+replacexec(path, args);`;
 
 const root = resolve(core.getInput("path"));
 const action = await readAction(root);
@@ -45,8 +47,9 @@ if (action.runs.using === "executable") {
   const mainMatrix = {};
   for (const [key, bin] of Object.entries(action.runs.main)) {
     mainMatrix[key] = { gz: false, bin, args: action.runs.args ?? [] };
-    if (await fileIsLarge(bin)) {
-      await gzip(bin);
+      const path = join(root, bin)
+      if (await fileIsLarge(path)) {
+      await gzip(path);
       mainMatrix[key].gz = true;
     }
   }
@@ -57,8 +60,9 @@ if (action.runs.using === "executable") {
     const preMatrix = {};
     for (const [key, bin] of Object.entries(action.runs.pre)) {
       preMatrix[key] = { gz: false, bin, args: [] };
-      if (await fileIsLarge(bin)) {
-        await gzip(bin);
+      const path = join(root, bin)
+      if (await fileIsLarge(path)) {
+        await gzip(path);
         preMatrix[key].gz = true;
       }
     }
@@ -71,8 +75,9 @@ if (action.runs.using === "executable") {
     const postMatrix = {};
     for (const [key, bin] of Object.entries(action.runs.post)) {
       postMatrix[key] = { gz: false, bin, args: [] };
-      if (await fileIsLarge(bin)) {
-        await gzip(bin);
+      const path = join(root, bin)
+      if (await fileIsLarge(path)) {
+        await gzip(path);
         postMatrix[key].gz = true;
       }
     }
