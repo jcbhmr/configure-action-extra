@@ -9,32 +9,11 @@
 runs:
   using: executable
   main:
-    windows: ./app.exe
-    macos:
-      x64: ./build/app-macos-x64
-    linux:
-      x64: ./build/linux/x64/app
-      arm64: ./target/release/app
-```
-
-<td>
-
-```yml
-# .github/workflows/publish-action.yml
-on:
-  release:
-    types: released
-jobs:
-  publish-action:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: cargo build --target x86_64-apple-darwin --release --locked
-      - run: GOOS=windows go build ./main.go -o app.exe
-      - run: gcc main.c -o build/app-linux
-      - uses: jcbhmr/configure-executable-action@v1
-      - uses: actions4git/add-commit-push@v1
-      - uses: actions4gh/publish-action@v1
+    windows-x64: .out/main-windows-amd64.exe
+    macos-x64: .out/main-darwin-amd64
+    macos-arm64: .out/main-darwin-arm64
+    linux-x64: .out/main-linux-amd64
+    linux-arm64: .out/main-linux-arm64
 ```
 
 </table>

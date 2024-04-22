@@ -14,7 +14,7 @@
     "semver": "^7.6.0",
     "typescript": "latest",
     "yaml": "^2.4.1",
-    "bun": "^1.0.33"
+    "bun": "latest"
   },
   "scripts": {
     "build": "bun build src/main.ts --outdir dist --target node",
